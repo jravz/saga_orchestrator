@@ -4,6 +4,8 @@ Saga Orchestration gem is inspired by Microservice Patterns by Chris Richardson.
 
 It provides a framework to employ the Saga Orchestration patterns described in detail in his books and articles. Secondly, it makes it easier for firms to visualize the entire flow as a set of steps.
 
+This is available on github at: [Saga Orchestration Gem](https://github.com/jravz/saga_orchestrator)
+
 ## Description
 
 The key goals this gem seeks to address are -
@@ -44,10 +46,9 @@ To build workflows, the first step is to design the workflow. Let us take an exa
 ![workflow](images/flow_chart.png)
 
 1. Create a child class inheriting from Saga::StateEngine
-2. Add a function register_states within the child class to setup all the states as below.
+2. Add a function state_registration within the child class as below to setup all the states as below. Use register_states features to register various states.
 
-'''
-def state_registration
+    def state_registration
 
       register_states do |add_state|
 
@@ -102,7 +103,6 @@ def state_registration
       end
 
     end
-'''
 
 ### How to define a state
 
