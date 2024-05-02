@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "saga_orchestrator"
-  s.version     = "0.15"
+  s.version     = "0.17"
   s.summary     = "Describe orchestration workflow as definitions and run within a state engine"
   s.description = "Framework to help employ the Saga Orchestration patterns in ruby or rails applications. Secondly, it makes it easier for firms to visualize the entire flow as a set of steps."
   s.authors     = ["Jayanth Ravindran"]

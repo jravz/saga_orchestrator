@@ -30,7 +30,9 @@ module Saga
     end
 
     def get_state_by_name name
-      @states[name]
+      res = @states[name]
+      raise NullStateError.new("Attempt to run an undefined state = #{name}.", { reason: "State has not been defined or registered.", code: 1001 }) if res.nil?
+      res
     end
 
     def keys

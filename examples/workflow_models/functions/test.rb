@@ -18,6 +18,13 @@ module Functions
       raise StandardError, "An error occurred"
     end
 
+    def self.test_func4 input
+      puts "in test_func: input - #{input}"
+      res = input * 10000
+      puts "result = #{res}"
+      res
+    end
+
     def self.conditional_test input
       res = input > 0
       puts "result = #{res}"

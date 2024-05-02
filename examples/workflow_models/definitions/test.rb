@@ -1,4 +1,4 @@
-require 'saga_orchestrator'
+require_relative '../../../lib/saga_orchestrator'
 require_relative '../processors/test'
 require_relative '../functions/test'
 require_relative '../rollback/test'
@@ -42,6 +42,14 @@ module Workflows
           state.process_output Processors::Test.method(:processor)
         end
 
+        add_state.standard :sample4 do |state|
+          state.call Functions::Test.method(:test_func4)
+          state.params do |p|
+            p.set_type :input_params
+          end
+
+        end
+
         add_state.standard :cond01 do |state|
           state.call Functions::Test.method(:conditional_test)
           state.params do |p|
@@ -55,14 +63,19 @@ module Workflows
 
     def sequence_states
       describe_flows do |seqs|
+
+        seqs.sub :seq_b do |seq|
+          seq.init state_name :sample4
+          seq.end
+        end
+
         seqs.start :seq_a do |seq|
           seq.init state_name :sample
           seq.then state_name :sample2
           seq.then_conditional state_name :cond01 do |t|
-            t.on_true state_name :sample
-            t.on_false state_name :sample2
+            t.on_true sequence_name :seq_b
+            t.on_false state_name :sample3
           end
-          seq.then state_name :sample3
           seq.end
         end
       end

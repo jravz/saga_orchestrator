@@ -86,8 +86,9 @@ module Saga
       current_node = active_node
 
       begin
-        if current_node.is_a?(Sequence)
+        if current_node.sequence?
           conduct_sequence current_node.activity.first
+          current_node.set_run_status true
         else
           @executing_node = current_node
           res = current_node.run @params, @last_result

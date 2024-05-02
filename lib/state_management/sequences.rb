@@ -21,6 +21,12 @@ module Saga
       @run_state = nil
     end
 
+    def set_run_status bool
+      if bool.is_a?(TrueClass) || bool.is_a?(FalseClass)
+        @run_state = bool
+      end
+    end
+
     def run params = nil, last_state_result=nil
 
       if self.type == :stop
@@ -44,7 +50,7 @@ module Saga
     def next
 
       if @run_state.nil?
-        raise NodeNotRunError.new("Node has not been run yet.", { reason: "Next can only be decided after node has been run.", code: 1001 })
+        raise NodeNotRunError.new("Node has not been run yet.: #{self.name}", { reason: "Next can only be decided after node has been run.", code: 1001 })
       end
 
       if @run_state == true
@@ -61,14 +67,18 @@ module Saga
     def set_do task
 
       if task.nil?
-        raise NullStateError.new("State not defined.", { reason: "State has not been defined or registered.", code: 1001 })
+        raise NullStateError.new("Attempt to run an undefined state.", { reason: "State has not been defined or registered.", code: 1001 })
       end
 
       if task.is_a?(Sequence)
         @action_type = :sequence
+        @name = task.name
+        puts "within sequence - #{@name}"
+      else
+        @name = task.state_name
+        puts "within task - #{@name}"
       end
       @do = task
-      @name = task.state_name
     end
 
     def name
@@ -150,6 +160,10 @@ module Saga
       @name = name
       @prev_node = []
       @initial_node = nil
+    end
+
+    def name
+      @name
     end
 
     def first
