@@ -48,61 +48,61 @@ To build workflows, the first step is to design the workflow. Let us take an exa
 1. Create a child class inheriting from Saga::StateEngine
 2. Add a function state_registration within the child class as below to setup all the states as below. Use register_states features to register various states.
 
-    def state_registration
+	   def state_registration
+	
+	      register_states do |add_state|
+	
+	        add_state.standard :state_01 do |state|
+	          state.call Functions::Test.method(:test_func)
+	          state.params do |p|
+	            p.set_type :input_params
+	          end
+	          state.process_output Processors::Test.method(:processor)
+	        end
+	
+	        add_state.standard :state_02 do |state|
+	          state.call Functions::Test.method(:test_func2)
+	          state.params do |p|
+	            p.set_type :last_result
+	          end
+	          state.process_input Processors::Test.method(:input_processor)
+	          state.process_output Processors::Test.method(:processor)
+	        end
+	
+	        add_state.compensatory :state_03 do |state|
+	          state.call Functions::Test.method(:test_func3)
+	          state.params do |p|
+	            p.set_type :last_result
+	          end
+	          state.rollback_method do |rollback|
+	            rollback.call Rollback::Test.method(:rollback2)
+	            rollback.params do |p|
+	              p.set_type :last_result
+	            end
+	          end
+	          state.process_input Processors::Test.method(:input_processor)
+	          state.process_output Processors::Test.method(:processor)
+	        end
+	
+	        add_state.standard :state_04 do |state|
+	          state.call Functions::Test.method(:test_func4)
+	          state.params do |p|
+	            p.set_type :last_result
+	          end
+	          state.process_input Processors::Test.method(:input_processor)
+	          state.process_output Processors::Test.method(:processor)
+	        end
+	
+	        add_state.standard :cond01 do |state|
+	          state.call Functions::Test.method(:conditional_test)
+	          state.params do |p|
+	            p.set_type :last_result
+	          end
+	        end
+	
+	      end
 
-      register_states do |add_state|
-
-        add_state.standard :state_01 do |state|
-          state.call Functions::Test.method(:test_func)
-          state.params do |p|
-            p.set_type :input_params
-          end
-          state.process_output Processors::Test.method(:processor)
-        end
-
-        add_state.standard :state_02 do |state|
-          state.call Functions::Test.method(:test_func2)
-          state.params do |p|
-            p.set_type :last_result
-          end
-          state.process_input Processors::Test.method(:input_processor)
-          state.process_output Processors::Test.method(:processor)
-        end
-
-        add_state.compensatory :state_03 do |state|
-          state.call Functions::Test.method(:test_func3)
-          state.params do |p|
-            p.set_type :last_result
-          end
-          state.rollback_method do |rollback|
-            rollback.call Rollback::Test.method(:rollback2)
-            rollback.params do |p|
-              p.set_type :last_result
-            end
-          end
-          state.process_input Processors::Test.method(:input_processor)
-          state.process_output Processors::Test.method(:processor)
-        end
-
-        add_state.standard :state_04 do |state|
-          state.call Functions::Test.method(:test_func4)
-          state.params do |p|
-            p.set_type :last_result
-          end
-          state.process_input Processors::Test.method(:input_processor)
-          state.process_output Processors::Test.method(:processor)
-        end
-
-        add_state.standard :cond01 do |state|
-          state.call Functions::Test.method(:conditional_test)
-          state.params do |p|
-            p.set_type :last_result
-          end
-        end
-
-      end
-
-    end
+    	end
 
 ### How to define a state
 
@@ -129,8 +129,7 @@ One simple way to sequence states is to do nothing. If you have defined the stat
 But if you have defined the states in any order and wish to put conditionals in the flow sequence, you can follow the steps below.
 The following is an example of a function that is added to the child class to provide your own sequence
 
-'''
-def sequence_states
+	def sequence_states
       describe_flows do |seqs|
 
         #this creates the first sequence with name :seq_a
@@ -145,7 +144,6 @@ def sequence_states
         end
       end
     end
-'''
 
 In addition to the above, you can also define a sub sequence using seqs.sub instead of seqs.start. There should be only one seqs.start as this is taken as the the point to start execution of the state engine. 
 To invoke a sub sequence, replace the state_name with > sequence_name :seq_name
