@@ -140,13 +140,16 @@ The following is an example of a function that is added to the child class to pr
             t.on_true state_name :state_03
             t.on_false state_name :state_04
           end
-          seq.end #closes the sequence
+          seq.end #closes the sequence. This can be inserted within any sub sequence or conditional flow and it will close execution immediately
         end
       end
     end
 
 In addition to the above, you can also define a sub sequence using seqs.sub instead of seqs.start. There should be only one seqs.start as this is taken as the the point to start execution of the state engine. 
-To invoke a sub sequence, replace the state_name with > sequence_name :seq_name
+To invoke a sub sequence, replace the state_name with:
+
+> sequence_name :seq_name
+
 
 ### How to run the state engine
 If lets say, our child class is defined as Workflows::Test, you can initiate the state engine as follows:
