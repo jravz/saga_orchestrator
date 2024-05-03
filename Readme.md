@@ -46,7 +46,7 @@ To build workflows, the first step is to design the workflow. Let us take an exa
 ![workflow](images/flow_chart.png)
 
 1. Create a child class inheriting from Saga::StateEngine
-2. Add a function state_registration within the child class as below to setup all the states as below. Use register_states features to register various states.
+2. Add a function state_registration within the child class as below to setup all the states as below. Use register_states features to register various states. (sample code below)
 
 	   def state_registration
 	
